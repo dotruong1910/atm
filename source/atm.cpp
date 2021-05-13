@@ -14,9 +14,9 @@ bool check_boi_so(int a)
     return false;
 }
 //https://www.oreilly.com/library/view/c-cookbook/0596007612/ch03s06.html
-double sciToDouble(const string &str)
+// tu viet lai ham nay`
+/* double sciToDouble(const string &str)
 {
-
     stringstream ss(str);
     double d = 0;
     ss >> d;
@@ -30,7 +30,7 @@ double sciToDouble(const string &str)
     }
 
     return (d);
-}
+} */
 bool atm::check_acc(string acc,string pass){
     ifstream file;
     file.open("user_info.csv");
@@ -68,9 +68,8 @@ void atm::login_screens(){
     }
 
 }
-void atm::menu(Account _a){
+void atm::menu(Account _a) {
     system("CLS");
-
     cout << "Vui long chon:\n"
          << "1. hien so du\n"
          << "2. gui tien vao tai khoan\n"
@@ -83,16 +82,29 @@ void atm::menu(Account _a){
         switch(n){
             case 1:
                 system("CLS");
+    
                 menu_sodu(_a);
+                tiep_tuc_giao_dich(_a);
                 break;
             case 2:
                 guitien_display(_a);
+                tiep_tuc_giao_dich(_a);
                 break;
             case 3:
                 _rut_tien(_a);
+                tiep_tuc_giao_dich(_a);
                 break;
+            case 5:
+                /* atm::delete get_id();
+                atm::~get_pass();
+                atm::~guitien_display();
+                atm::~get_Balance();
+                atm::~menu_sodu(); */
+                system("CLS");
+                login_screens();
+            break;
         };
-};
+}
 /* int atm::getInput(Account _a){
     int input;
     cin >> input;
@@ -110,10 +122,12 @@ void atm::menu(Account _a){
  */
 void atm::menu_sodu(Account _a){
     
-    string s = _a.check_so_du();
+    /* string s = _a.check_so_du();
     double res = sciToDouble(s);
+ */
+    cout<<"so du cua ban la:"<<fixed<<int(get_Balance(_a)); 
+    //tiep_tuc_giao_dich(_a); 
 
-    cout<<"so du cua ban la:"<<fixed<<int(res);   
 }
 // phai viet nhu nay vi trong file la dinh dang scientific
 double atm::get_Balance(Account _a){
@@ -134,12 +148,18 @@ double atm::get_Balance(Account _a){
 //gui tien
 void atm::guitien_display(Account _a){
     system("CLS");
+    stringstream ss;
+    string _money ="";
     int money;
     cout<<"menh gia nho nhat: 10.000 VND\n"
         <<"menh gio lon nhat: 500.000 VND\n"
         <<"so tien ban muon gui phai la boi so cua 10.000\n"
         <<"so tien ban muon gui la:";
     cin >> money;
+    ss << money;
+    ss>>_money;
+    _money='+'+_money;
+    ss.clear();
     if (money < 10000 || money >500000 || check_boi_so(money) == false){
         do
         {
@@ -149,6 +169,7 @@ void atm::guitien_display(Account _a){
         } while (money < 10000 || money > 500000 || check_boi_so(money) == false);
     }
     string s = _a.get_Id();
+    history_Update(_a,_money);
     //lay id de kiem tra so du cua id day
     hoptien(money);
     _a.gui_tien(money,s);
@@ -174,6 +195,9 @@ void atm::hoptien(int money){
 }
 //rut tien khoi cay atm
     // chua hoan can phai check them la atm co the tra duoc so tien can rut hay khong
+// giai thuat tham lam --> da cai dat
+    // return ve so to it nhat
+        //check hop tien cua ngan hang
 void atm::_rut_tien(Account _a){
     system("CLS");
     int money ;
@@ -201,6 +225,49 @@ void atm::_rut_tien(Account _a){
         cout<<"Xin loi so du con lai khong the thuc hien dao dich nay!";
     }
 }
-
-
+//check point
+void atm::tiep_tuc_giao_dich(Account _a){
+    cout<<"\nTiep tuc dao dich nhap? [Y]/[N] \n";
+    char c ;
+    cin >> c;
+    if(c == 'Y'){
+        menu(_a);
+    }
+    else{
+        cout<<"Cam on quy khach!";
+        c = cin.get();
+        cin.ignore();
+        system("CLS");
+        login_screens();
+    }
+}
+//update history
+    //* add a line
+// have a lot of bug
+void atm::history_Update(Account _a,string money) {
+    ofstream file;
+    file.open("new_lichsugiaodich.txt",ios::app);
+    ifstream  f;
+    f.open("lichsugiaodich.txt");
+    /* string line;
+    getline(cin,line); */
+    string s = _a.get_Id();
+    if ( f.is_open() ) {
+        string data;
+        string funct;
+        while (!f.eof()) {
+            string s = _a.get_Id();
+            //string account_id;
+            f >> data;
+            file <<data;
+            if(s == data) {
+                file <<'\n' << money<<'\n';
+            }
+        }
+    }
+    f.close();
+    file.close();
+    remove("lichsugiaodich.txt");
+    rename("new_lichsugiaodich.txt","lichsugiaodich.txt");
+}
 

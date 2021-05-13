@@ -4,7 +4,7 @@
     + có thể thêm chức năng đăng kí
     - Nhập ID, nhập password
       + Nhập đúng hiển thị chức năng(done)
-      + sai dưới 5 lần cho nhập tiếp(notdone)
+      + sai dưới 5 lần cho nhập tiếp(not done)
         sai 5 quá 5 lần liên tiếp -> khoá thẻ
     - Gửi tiền:
         + lẻ đến 10.000 VND
@@ -32,4 +32,4 @@ VD nạp vào 100 tớ 500k
         //* viet lai hoptien
             //cai dat thuat toan tham lam
                 // chua lam chuc nang khoa the
-                    // chua lam vong lap vo han
+                    // chua lam vong lap vo han (maybe done;)

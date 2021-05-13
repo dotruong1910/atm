@@ -23,6 +23,9 @@ class atm
         void hoptien(int money);
         void _rut_tien(Account _a);
         double get_Balance(Account _a);
+        void tiep_tuc_giao_dich(Account _a);
+        void history_Update(Account _a,string money);
+    
     private:
         string id;
         string password;

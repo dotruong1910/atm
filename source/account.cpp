@@ -77,7 +77,6 @@ bool Account::rut_tien(int tien_rut,string _id){
     return true;
 }
 // done
-
 void Account::gui_tien(int money,string id){
     ifstream file;
     file.open("user_balance.txt");
