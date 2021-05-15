@@ -1,5 +1,7 @@
 #include "atm_h.h"
 #include "account.h"
+#include "guitien.h"
+#include "display.h"
 #include<iostream>
 #include<fstream>
 #include<sstream>
@@ -7,12 +9,13 @@
 #include<string>
 using namespace std;
 class Account;
-bool check_boi_so(int a)
+/* class Gui_tien; */
+/* bool check_boi_so(int a)
 {
     if (a % 10000 == 0)
         return true;
     return false;
-}
+} */
 
 bool atm::check_acc(string acc,string pass){
     ifstream file;
@@ -50,23 +53,25 @@ void atm::login_screens(){
         Account _a(_id);
         atm::menu(_a);
     }
+    else{
+        solannhapsai++;
+    }
 
 }
 void atm::menu(Account _a) {
-    system("CLS");
-    cout << "Vui long chon:\n"
-         << "1. hien so du\n"
-         << "2. gui tien vao tai khoan\n"
-         << "3. rut tien\n"
-         << "4. lich su giao dich\n"
-         << "5. thoat\n"
-         << "vui nhap lua chon: ";
+    //window
+    //system("CLS");
+        // linux
+        system("clear");
+    options_display();
         int n ;
         cin >> n;
         switch(n){
             case 1:
-                system("CLS");
-    
+                //window
+                //system("CLS");
+                    // linux
+                system("clear");
                 menu_sodu(_a);
                 tiep_tuc_giao_dich(_a);
                 break;
@@ -79,40 +84,16 @@ void atm::menu(Account _a) {
                 tiep_tuc_giao_dich(_a);
                 break;
             case 5:
-                /* atm::delete get_id();
-                atm::~get_pass();
-                atm::~guitien_display();
-                atm::~get_Balance();
-                atm::~menu_sodu(); */
-                system("CLS");
+                //window
+                //system("CLS");
+                    // linux
+                    system("clear");
                 login_screens();
             break;
         };
 }
-/* int atm::getInput(Account _a){
-    int input;
-    cin >> input;
-    if (input >= 1 && input <= 5)
-        return input;
-    else
-    {
-        system("CLS");
-        cout << "khong hop le nhan phim bat ki de nhap lai!\n";
-        cin.get();
-        menu(_a);
-        getInput(_a);
-    }
-};
- */
-// phai viet nhu nay vi trong file la dinh dang scientific
 void atm::menu_sodu(Account _a){
-    
-    /* string s = _a.check_so_du();
-    double res = sciToDouble(s);
- */
     cout<<"so du cua ban la:"<<fixed<<int(get_Balance(_a)); 
-    //tiep_tuc_giao_dich(_a); 
-
 }
 // kiem tra so du
 double atm::get_Balance(Account _a){
@@ -132,30 +113,19 @@ double atm::get_Balance(Account _a){
 }
 //gui tien
 void atm::guitien_display(Account _a){
-    system("CLS");
-    stringstream ss;
-    string _money ="";
-    int money;
-    cout<<"menh gia nho nhat: 10.000 VND\n"
-        <<"menh gio lon nhat: 500.000 VND\n"
-        <<"so tien ban muon gui phai la boi so cua 10.000\n"
-        <<"so tien ban muon gui la:";
-    cin >> money;
-    ss << money;
-    ss>>_money;
-    _money='+'+_money;
-    ss.clear();
-    if (money < 10000 || money >500000 || check_boi_so(money) == false){
-        do
-        {
-            cout << "so tien vua nhap khong hop le vui long nhap lai!\n"
-                 << "so tien ban muon gui la:";
-            cin >> money;
-        } while (money < 10000 || money > 500000 || check_boi_so(money) == false);
-    }
-    string s = _a.get_Id();
-    history_Update(_a,_money);
+    //window
+    //system("CLS");
+        // linux
+        system("clear");
+    //guitien.h
+    menh_gia_display();
+    int money = nhap_so_tien();
+    string _money = stringConvert(money);
+    while(moneyCheck(money,_money) != true ) history_Update(_a,_money,"gui_tien","that_bai");
+    //guitien.h
     //lay id de kiem tra so du cua id day
+    string s = _a.get_Id();
+    history_Update(_a,_money,"gui_tien","thanh_cong");
     hoptien(money);
     _a.gui_tien(money,s);
 }
@@ -184,16 +154,12 @@ void atm::hoptien(int money){
     // return ve so to it nhat
         //check hop tien cua ngan hang
 void atm::_rut_tien(Account _a){
+    // viet lai rut tien
     system("CLS");
-    int money ;
-    cout << "menh gia nho nhat: 10.000 VND\n"
-         << "menh gio lon nhat: 500.000 VND\n"
-         << "so tien ban muon rut phai la boi so cua 10.000\n"
-         << "so tien ban muon rut la:";
-    cin >> money;
-    if (money < 10000 || money > 500000 || check_boi_so(money) == false)
-    {
-        do
+    rut_tien_menh_gia();
+    int money  = nhap_so_tien();
+    string _money = stringConvert(money);
+    if (money < 10000 || money > 500000 || check_boi_so(money) == false) {
         {
             cout << "so tien vua nhap khong hop le vui long nhap lai!\n"
                  << "so tien ban muon gui la:";
@@ -201,13 +167,15 @@ void atm::_rut_tien(Account _a){
         } while (money < 10000 || money > 500000 || check_boi_so(money) == false);
     }
     string s = _a.get_Id();
-    if(_a.rut_tien(money,s)==true){
+    if(_a.rut_tien(money,s)==true) {
         cout<<"Rut tien thanh cong!\n"
             <<"so du con lai cua ban la:"<<fixed<<int(get_Balance(_a));
+        history_Update(_a,_money,"rut_tien","thanh_cong");
         //menu_sodu(_a);
     }
     else{
         cout<<"Xin loi so du con lai khong the thuc hien dao dich nay!";
+        history_Update(_a,_money,"rut_tien","that_bai");
     }
 }
 //check point
@@ -222,14 +190,17 @@ void atm::tiep_tuc_giao_dich(Account _a){
         cout<<"Cam on quy khach!";
         c = cin.get();
         cin.ignore();
-        system("CLS");
+        //system("CLS");
+        system("clear");
         login_screens();
     }
 }
 //update history
     //* add a line
 // have a lot of bug
-void atm::history_Update(Account _a,string money) {
+// neu giao dich khong thanh cong thi ko cap nhat lich su 
+    // or co cap nhat nhung khong thanh cong
+void atm::history_Update(Account _a,string money,string func,string status) {
     string s = _a.get_Id();
     string file_name = s+"_lichsugiaodich.txt";
     const char* fileDes = &file_name[0];
@@ -238,11 +209,11 @@ void atm::history_Update(Account _a,string money) {
     ifstream  f;
     f.open(fileDes);
     if ( f.is_open() ) {
-        file << money<<'\n';
+        file << money<<' '<<func<<' '<<status<<'\n';
         while (!f.eof()) {
-            string data;
-            f >> data;
-            file <<data<<'\n';
+            string data1,data2,data3;
+            f >> data1 >> data2 >> data3;
+            file <<data1<<' '<<data2<<' '<<data3<<'\n';
         }
     f.close();
     file.close();

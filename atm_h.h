@@ -2,6 +2,7 @@
 #define atm_h
 #include<string>
 #include"account.h"
+#include"guitien.h"
 using namespace std;
 class atm
 {
@@ -24,7 +25,7 @@ class atm
         void _rut_tien(Account _a);
         double get_Balance(Account _a);
         void tiep_tuc_giao_dich(Account _a);
-        void history_Update(Account _a,string money);
+        void history_Update(Account _a,string money,string func,string sta);
     
     private:
         string id;
