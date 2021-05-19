@@ -5,9 +5,9 @@
 
 using namespace std;
 void menh_gia_display() {
-    cout<<"menh gia nho nhat: 10.000 VND\n"
+    cout<<"menh gia nho nhat: 50.000 VND\n"
         <<"menh gio lon nhat: 500.000 VND\n"
-        <<"so tien ban muon gui phai la boi so cua 10.000\n"
+        <<"so tien ban muon gui phai la boi so cua 50.000\n"
         <<"so tien ban muon gui la:";
 }
 void options_display() {
@@ -20,7 +20,7 @@ void options_display() {
          << "vui nhap lua chon: ";
 }
 void rut_tien_menh_gia() {
-        cout << "menh gia nho nhat: 10.000 VND\n"
+        cout << "menh gia nho nhat: 50.000 VND\n"
          << "menh gio lon nhat: 500.000 VND\n"
          << "so tien ban muon rut phai la boi so cua 10.000\n"
          << "so tien ban muon rut la:";

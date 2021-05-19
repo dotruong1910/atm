@@ -32,6 +32,7 @@ class atm
         string password;
         Account a;
 };
-double sciToDouble(const string &str);
-
+void greedy(int n );
+void hoptien_update(int arr[]);
+int laysoluong(int n);
 #endif

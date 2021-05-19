@@ -6,9 +6,32 @@
 
 
 using namespace std;
+int a[5] ={500000,200000,100000,50000,10000};
+void guitien_hoptien_update(int arr[]){
+    ifstream f;
+    f.open("hoptien.txt");
+    ofstream file;
+    file.open("_newhoptien.txt",ios::app|ios::out);
+    if(f.is_open() ) {
+        int i = 0;
+        while(!f.eof()) {
+        int data ,count;
+        f >> data >> count;
+        count = arr[i];
+        if(data == a[i] ){
+            file<<data<<' '<<count<<'\n';
+            i++;
+        }
+        }
+        file.close();
+        f.close();
+        remove("hoptien.txt");
+        rename("_newhoptien.txt","hoptien.txt");
+    }
+}
 bool check_boi_so(int a)
 {
-    if (a % 10000 == 0)
+    if (a % 50000 == 0)
         return true;
     return false;
 }
@@ -16,9 +39,37 @@ bool flag() {
     
     return true;
 }
+void nhapsoto(int n,int& tong,int arr[]){
+    if(tong == n) 
+        return true;
+    else {
+    int number;
+    tong = 0;
+    cout <<"nhap so to 500.000: ";
+    cin >> number;
+    tong+=number*a[0];
+    cout<<"nhap so to 200.000: ";
+    cin >> number;
+    tong+=number*a[1];
+    cout<<"nhap so to 100.000: ";
+    cin >> number;
+    tong+=number*a[2];
+    cout<<"nhap so to 50.000: ";
+    cin >> number;
+    tong+=number*a[3];
+    cout<<"nhap so to 10.000: ";
+    cin >> number;
+    tong+=number*a[4];
+    nhapsoto(n,tong,arr);
+    }
+    return true;
+}
 int nhap_so_tien() {
     int money;
+    int tong = 0;
+    int soto[4] = {0,0,0,0};
     cin >> money;
+    nhapsoto(money,tong,soto);
     return money;
 }
 string stringConvert(int n){
@@ -31,7 +82,7 @@ string stringConvert(int n){
     return _money;
 }
 bool moneyCheck(int& money,string& s) {
-    if(money >= 10000 && money <= 500000 && check_boi_so(money) == true) {
+    if(money >= 10000  && check_boi_so(money) == true) {
         s = stringConvert(money);
         return true;
     }

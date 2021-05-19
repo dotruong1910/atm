@@ -9,5 +9,7 @@ using namespace std;
     string stringConvert(int n);
     bool check_boi_so(int a);
     bool moneyCheck(int& n,string& s);
+    bool nhapsoto(int n,int& tong,int arr[]);
+    void guitien_hoptien_update();
     bool flag();
 #endif

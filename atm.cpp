@@ -10,13 +10,103 @@
 using namespace std;
 class Account;
 /* class Gui_tien; */
-/* bool check_boi_so(int a)
-{
-    if (a % 10000 == 0)
-        return true;
-    return false;
-} */
 
+int a[5] ={500000,200000,100000,50000};
+int count[5]={0,0,0,0};
+void hoptien_update(int arr[]) {
+    ifstream f;
+    f.open("hoptien.txt");
+    ofstream file;
+    file.open("_newhoptien.txt",ios::app|ios::out);
+    if(f.is_open() ) {
+        int i = 0;
+        while(!f.eof()) {
+        int data ,count;
+        f >> data >> count;
+        count = arr[i];
+        if(data == a[i] ){
+            file<<data<<' '<<count<<'\n';
+            i++;
+        }
+        }
+        file.close();
+        f.close();
+        remove("hoptien.txt");
+        rename("_newhoptien.txt","hoptien.txt");
+    }
+}
+int laysoluong(int n) {
+    ifstream f;
+    f.open("hoptien.txt");
+    if(f.is_open()) {
+        while(!f.eof()) {
+            int data , soluong;
+            f >> data >> soluong;
+            if(data == n ) return soluong;
+        }
+    }
+    return 0;
+}
+void greedy(int n){
+    int sl[5]={0,0,0,0};
+    for(int i = 0 ; i< 4;i++) {
+        sl[i] = laysoluong(a[i]);
+        cout<<sl[i] <<" ";
+    }
+    if(sl[0]!= 0){
+        int _count = 0;
+        while(sl[0] != 0 && n >= a[0]) {
+            _count++;
+            n = n - a[0];
+            sl[0] -= 1;
+            if(sl[0] == 0) break;
+        }
+        //cout<<sl[0];
+        count[0] = _count;
+    }
+    if(sl[1]!= 0){
+        int _count = 0;
+        while(sl[1]!= 0 && n >= a[1]) {
+            _count++;
+            n = n - a[1];
+            sl[1]-= 1;
+            if(sl[1]== 0) break;
+        }
+        count[1] = _count;
+    }
+    if(sl[2]!= 0){
+        int _count = 0;
+        while(sl[2] != 0 && n >= a[2]) {
+            _count++;
+            n = n - a[2];
+            sl[2] -= 1;
+            if(sl[2] == 0) break;
+        }
+        count[2] = _count;
+    }
+    if(sl[3]!= 0){
+        int _count = 0;
+        while(sl[3] != 0 && n >= a[3]) {
+            _count++;
+            n = n - a[3];
+            sl[3] -= 1;
+            if(sl[3] == 0) break;
+        }
+        count[3] = _count;
+    }
+    cout<<"\n";
+    if(n != 0 ) cout<<" none";
+    else {
+    for(int i = 0; i<4;i++){
+        if(i==0)cout<<count[i]<<"*500 + ";
+        if(i==1)cout<<count[i]<<"*200 + ";
+        if(i==2)cout<<count[i]<<"*100 + ";
+        if(i==3)cout<<count[i]<<"*50 +  ";
+    }
+    }
+    hoptien_update(sl);
+    //cout<<"\n"<<sl[4];
+}
 bool atm::check_acc(string acc,string pass){
     ifstream file;
     file.open("user_info.csv");
@@ -130,46 +220,24 @@ void atm::guitien_display(Account _a){
     _a.gui_tien(money,s);
 }
 //So tien co trong cay atm
-void atm::hoptien(int money){
-    ofstream f;
-    ifstream  file;
-    file.open("hoptien.txt");
-    f.open("hoptien.txt",ios::app);
-    if(file.is_open()){
-        int a;
-        a = money;
-        stringstream s;
-        s << a;
-        string newline;
-        s >> newline;
-        s.clear();
-        f <<newline<<endl;
-    }
-    f.close();
-    file.close();
-}
-//rut tien khoi cay atm
-    // chua hoan can phai check them la atm co the tra duoc so tien can rut hay khong
-// giai thuat tham lam --> chua cai dat
-    // return ve so to it nhat
-        //check hop tien cua ngan hang
 void atm::_rut_tien(Account _a){
     // viet lai rut tien
     system("CLS");
     rut_tien_menh_gia();
     int money  = nhap_so_tien();
     string _money = stringConvert(money);
-    if (money < 10000 || money > 500000 || check_boi_so(money) == false) {
+    if (money < 10000  || check_boi_so(money) == false) {
         {
             cout << "so tien vua nhap khong hop le vui long nhap lai!\n"
                  << "so tien ban muon gui la:";
             cin >> money;
-        } while (money < 10000 || money > 500000 || check_boi_so(money) == false);
+        } while (money < 10000 || check_boi_so(money) == false);
     }
     string s = _a.get_Id();
     if(_a.rut_tien(money,s)==true) {
-        cout<<"Rut tien thanh cong!\n"
-            <<"so du con lai cua ban la:"<<fixed<<int(get_Balance(_a));
+        cout<<"Rut tien thanh cong!\n";
+        greedy(money);
+        cout<<"so du con lai cua ban la:"<<fixed<<int(get_Balance(_a));
         history_Update(_a,_money,"rut_tien","thanh_cong");
         //menu_sodu(_a);
     }
