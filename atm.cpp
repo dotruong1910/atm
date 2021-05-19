@@ -11,7 +11,7 @@ using namespace std;
 class Account;
 /* class Gui_tien; */
 
-int a[5] ={500000,200000,100000,50000};
+int value[5] ={500000,200000,100000,50000};
 int count[5]={0,0,0,0};
 void hoptien_update(int arr[]) {
     ifstream f;
@@ -24,7 +24,7 @@ void hoptien_update(int arr[]) {
         int data ,count;
         f >> data >> count;
         count = arr[i];
-        if(data == a[i] ){
+        if(data == value[i] ){
             file<<data<<' '<<count<<'\n';
             i++;
         }
@@ -50,14 +50,14 @@ int laysoluong(int n) {
 void greedy(int n){
     int sl[5]={0,0,0,0};
     for(int i = 0 ; i< 4;i++) {
-        sl[i] = laysoluong(a[i]);
+        sl[i] = laysoluong(value[i]);
         cout<<sl[i] <<" ";
     }
     if(sl[0]!= 0){
         int _count = 0;
-        while(sl[0] != 0 && n >= a[0]) {
+        while(sl[0] != 0 && n >= value[0]) {
             _count++;
-            n = n - a[0];
+            n = n - value[0];
             sl[0] -= 1;
             if(sl[0] == 0) break;
         }
@@ -66,9 +66,9 @@ void greedy(int n){
     }
     if(sl[1]!= 0){
         int _count = 0;
-        while(sl[1]!= 0 && n >= a[1]) {
+        while(sl[1]!= 0 && n >= value[1]) {
             _count++;
-            n = n - a[1];
+            n = n - value[1];
             sl[1]-= 1;
             if(sl[1]== 0) break;
         }
@@ -76,9 +76,9 @@ void greedy(int n){
     }
     if(sl[2]!= 0){
         int _count = 0;
-        while(sl[2] != 0 && n >= a[2]) {
+        while(sl[2] != 0 && n >= value[2]) {
             _count++;
-            n = n - a[2];
+            n = n - value[2];
             sl[2] -= 1;
             if(sl[2] == 0) break;
         }
@@ -86,9 +86,9 @@ void greedy(int n){
     }
     if(sl[3]!= 0){
         int _count = 0;
-        while(sl[3] != 0 && n >= a[3]) {
+        while(sl[3] != 0 && n >= value[3]) {
             _count++;
-            n = n - a[3];
+            n = n - value[3];
             sl[3] -= 1;
             if(sl[3] == 0) break;
         }
@@ -216,7 +216,7 @@ void atm::guitien_display(Account _a){
     //lay id de kiem tra so du cua id day
     string s = _a.get_Id();
     history_Update(_a,_money,"gui_tien","thanh_cong");
-    hoptien(money);
+    //hoptien(money);
     _a.gui_tien(money,s);
 }
 //So tien co trong cay atm

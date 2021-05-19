@@ -1,3 +1,4 @@
++500000 gui_tien thanh_cong
 +450000 gui_tien thanh_cong
 +500000 gui_tien thanh_cong
   

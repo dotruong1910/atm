@@ -26,7 +26,7 @@ class atm
         double get_Balance(Account _a);
         void tiep_tuc_giao_dich(Account _a);
         void history_Update(Account _a,string money,string func,string sta);
-    
+        
     private:
         string id;
         string password;
