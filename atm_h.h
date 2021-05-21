@@ -26,7 +26,9 @@ class atm
         double get_Balance(Account _a);
         void tiep_tuc_giao_dich(Account _a);
         void history_Update(Account _a,string money,string func,string sta);
-        
+        void history_show(Account _a);
+        bool status_check(string s,string p);
+        void khoa_tai_khoan(string s);
     private:
         string id;
         string password;

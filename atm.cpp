@@ -109,44 +109,125 @@ void greedy(int n){
 }
 bool atm::check_acc(string acc,string pass){
     ifstream file;
-    file.open("user_info.csv");
+    file.open("user_info.txt");
     /* string s;
     getline(file,s); */
     if(file.is_open()){
         while(!file.eof()){
             string _id,_pass;
-            //int l;
-            getline(file,_id,',');
-            getline(file,_pass);
-            //file >> l;
+            int status;
+            file >> _id >>_pass;
             if(_id == acc && _pass == pass){ 
                 file.close();
                 return true;
             }
+            file >> status;
         }
     }
     file.close();
     return false;
 }
+//check status;
+bool atm::status_check(string s,string p) {
+    ifstream file;
+    file.open("user_info.txt");
+    if(file.is_open()){
+        while(!file.eof()){
+            string _id,_pass;
+            int status;
+            file >> _id >>_pass;
+            file >> status;
+            if(_id == s && _pass == p){ 
+                if(status == 1) return false;
+                return true;
+            }
+        }
+    }
+    file.close();
+    return true;
+}
+void atm::khoa_tai_khoan(string s){
+    ofstream file_out;
+    file_out.open("temp.txt",ios::app|ios::out);
+    ifstream file_in;
+    file_in.open("user_info.txt");
+    if(file_in.is_open()) {
+        while(!file_in.eof()) {
+            string _id,_pass;
+            int status;
+            file_in>>_id >> _pass >> status;
+            if(_id == s) {
+                status = 1;
+            }
+            file_out<<_id<<' '<<_pass<<' '<<status<<'\n';
+        }
+        file_out.close();
+        file_in.close();
+        remove("user_info.txt");
+        rename("temp.txt","user_info.txt");
+    }
+}
 //Truyen vao account de thao tac voi cai account
 void atm::login_screens(){
-    int solannhapsai = 0;
+    int solannhapsai = 0,flag = 0;
     string _id;
     string _password;
-    cout<<"id:";cin >> _id;
-    cout<<"password:";
-    cin >> _password;
-    string _id_check = atm::get_id(_id);
-    string _password_check = atm::get_pass(_password);
-    if(atm::check_acc(_id_check,_password_check) == true)
-    {
-        Account _a(_id);
-        atm::menu(_a);
+    cout<<"id:"; cin >> _id;
+    cout<<"password:"; cin >> _password;
+    if(status_check(_id,_password) == false) {
+        cout<<"Tai khoan nay da bi khoa!";
+        flag = 1;
+        cout<<"\nbam phim bat ki de tiep tuc giao dich!";
+        char c;
+        c = cin.get();
+        cin.ignore();
     }
     else{
-        solannhapsai++;
+        while(solannhapsai <= 5) {
+            if(check_acc(_id,_password) == true) {
+                break;
+            }
+            else {
+                if(solannhapsai == 5) {
+                    khoa_tai_khoan(_id);
+                    cout<<"tai khoan cua ban da bi khoa!"
+                        <<"\nbam phim bat ki de tiep tuc giao dich!";
+                    char c;
+                    c = cin.get();
+                    cin.ignore();
+                    flag = 1;
+                    break;
+                }
+                else {
+                    system("clear");
+                    cout<<"mat khau nhap sai, vui long nhap lai!\n";
+                    cout<<"bam phim bat ki de nhap lai\n";
+                    char c;
+                    c = cin.get();
+                    cin.ignore();
+                    system("clear");
+                    cout<<"id:"; cin >> _id;
+                    cout<<"password:"; cin >> _password;
+                    /* string _id_check = atm::get_id(_id);
+                    string _password_check = atm::get_pass(_password); */
+                    if(atm::check_acc(_id,_password) == true) {
+                        solannhapsai = 0;
+                        break;
+                    }    
+                    solannhapsai++;
+                }
+            }
+        }
     }
-
+    if(flag == 0) { 
+        Account _a(_id);
+        atm::menu(_a);
+        solannhapsai = 0;
+    }
+    else {
+        system("clear");
+        login_screens();
+    }
 }
 void atm::menu(Account _a) {
     //window
@@ -161,7 +242,7 @@ void atm::menu(Account _a) {
                 //window
                 //system("CLS");
                     // linux
-                system("clear");
+                //system("clear");
                 menu_sodu(_a);
                 tiep_tuc_giao_dich(_a);
                 break;
@@ -171,6 +252,10 @@ void atm::menu(Account _a) {
                 break;
             case 3:
                 _rut_tien(_a);
+                tiep_tuc_giao_dich(_a);
+                break;
+            case 4:
+                history_show(_a);
                 tiep_tuc_giao_dich(_a);
                 break;
             case 5:
@@ -183,6 +268,7 @@ void atm::menu(Account _a) {
         };
 }
 void atm::menu_sodu(Account _a){
+    system("clear");
     cout<<"so du cua ban la:"<<fixed<<int(get_Balance(_a)); 
 }
 // kiem tra so du
@@ -263,11 +349,6 @@ void atm::tiep_tuc_giao_dich(Account _a){
         login_screens();
     }
 }
-//update history
-    //* add a line
-// have a lot of bug
-// neu giao dich khong thanh cong thi ko cap nhat lich su 
-    // or co cap nhat nhung khong thanh cong
 void atm::history_Update(Account _a,string money,string func,string status) {
     string s = _a.get_Id();
     string file_name = s+"_lichsugiaodich.txt";
@@ -293,4 +374,10 @@ void atm::history_Update(Account _a,string money,string func,string status) {
     //khong cap phat new nen khong can giai phong
         //delete fileDes;
 }
-
+void atm::history_show(Account _a) {
+    system("clear");
+    string s = _a.get_Id();
+    string fileDes = s+"_lichsugiaodich.txt";
+    const char* fileName = &fileDes[0];
+    history_display(fileName);
+}
