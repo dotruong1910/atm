@@ -11,8 +11,8 @@ using namespace std;
 class Account;
 /* class Gui_tien; */
 
-int value[5] ={500000,200000,100000,50000};
-int count[5]={0,0,0,0};
+int value[5] ={500000,200000,100000,50000,10000};
+int count[5]={0,0,0,0,0};
 void hoptien_update(int arr[]) {
     ifstream f;
     f.open("hoptien.txt");
@@ -48,10 +48,10 @@ int laysoluong(int n) {
     return 0;
 }
 void greedy(int n){
-    int sl[5]={0,0,0,0};
-    for(int i = 0 ; i< 4;i++) {
+    int sl[5]={0,0,0,0,0};
+    for(int i = 0 ; i< 5;i++) {
         sl[i] = laysoluong(value[i]);
-        cout<<sl[i] <<" ";
+        //cout<<sl[i] <<" ";
     }
     if(sl[0]!= 0){
         int _count = 0;
@@ -94,17 +94,27 @@ void greedy(int n){
         }
         count[3] = _count;
     }
+    if(sl[4]!= 0){
+        int _count = 0;
+        while(sl[4] != 0 && n >= value[4]) {
+            _count++;
+            n = n - value[4];
+            sl[3] -= 1;
+            if(sl[3] == 0) break;
+        }
+        count[3] = _count;
+    }
     cout<<"\n";
     if(n != 0 ) cout<<" none";
     else {
-    for(int i = 0; i<4;i++){
-        if(i==0)cout<<count[i]<<"*500 + ";
-        if(i==1)cout<<count[i]<<"*200 + ";
-        if(i==2)cout<<count[i]<<"*100 + ";
-        if(i==3)cout<<count[i]<<"*50 +  ";
+    for(int i = 0; i<5;i++){
+        if(i==0)cout<<"so to 500.000: "<<count[i]<<"\n";
+        if(i==1)cout<<"so to 200.000: "<<count[i]<<"\n";
+        if(i==2)cout<<"so to 100.000: "<<count[i]<<"\n";
+        if(i==3)cout<<"so to 50.000: "<<count[i]<<"\n";
+        if(i==4)cout<<"so to 10.000: "<<count[i]<<"\n";
     }
-    }
-    hoptien_update(sl);
+    }    hoptien_update(sl);
     //cout<<"\n"<<sl[4];
 }
 bool atm::check_acc(string acc,string pass){
@@ -308,9 +318,10 @@ void atm::guitien_display(Account _a){
 //So tien co trong cay atm
 void atm::_rut_tien(Account _a){
     // viet lai rut tien
-    system("CLS");
+    system("clear");
     rut_tien_menh_gia();
-    int money  = nhap_so_tien();
+    int money = 0;
+    cin >> money;
     string _money = stringConvert(money);
     if (money < 10000  || check_boi_so(money) == false) {
         {

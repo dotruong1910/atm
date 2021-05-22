@@ -1,3 +1,4 @@
++50000 rut_tien that_bai
 +50000 rut_tien thanh_cong
 +100000 rut_tien that_bai
 +50000 gui_tien thanh_cong
