@@ -2,6 +2,7 @@
 #include "account.h"
 #include "guitien.h"
 #include "display.h"
+#include "bankdata.h"
 #include<iostream>
 #include<fstream>
 #include<sstream>
@@ -9,6 +10,7 @@
 #include<string>
 using namespace std;
 class Account;
+class Display;
 /* class Gui_tien; */
 
 int value[5] ={500000,200000,100000,50000,10000};
@@ -179,72 +181,31 @@ void atm::khoa_tai_khoan(string s){
 }
 //Truyen vao account de thao tac voi cai account
 void atm::login_screens(){
-    int solannhapsai = 0,flag = 0;
-    string _id;
-    string _password;
-    cout<<"id:"; cin >> _id;
-    cout<<"password:"; cin >> _password;
-    if(status_check(_id,_password) == false) {
-        cout<<"Tai khoan nay da bi khoa!";
-        flag = 1;
-        cout<<"\nbam phim bat ki de tiep tuc giao dich!";
-        char c;
-        c = cin.get();
+    Display D;
+    int option = D.login_or_signin();
+    if(option == 1) {
+        system("clear");
+        atm_working();
+    }
+    else if(option == 2) {
+        D.signup_screen();
+        system("clear");
+        cout<<"Dang ki thanh cong!\nBam phim bat ki de tro lai man hinh lam viec\n";
+        char c; 
+        c =cin.get();
         cin.ignore();
-    }
-    else{
-        while(solannhapsai <= 5) {
-            if(check_acc(_id,_password) == true) {
-                break;
-            }
-            else {
-                if(solannhapsai == 5) {
-                    khoa_tai_khoan(_id);
-                    cout<<"tai khoan cua ban da bi khoa!"
-                        <<"\nbam phim bat ki de tiep tuc giao dich!";
-                    char c;
-                    c = cin.get();
-                    cin.ignore();
-                    flag = 1;
-                    break;
-                }
-                else {
-                    system("clear");
-                    cout<<"mat khau nhap sai, vui long nhap lai!\n";
-                    cout<<"bam phim bat ki de nhap lai\n";
-                    char c;
-                    c = cin.get();
-                    cin.ignore();
-                    system("clear");
-                    cout<<"id:"; cin >> _id;
-                    cout<<"password:"; cin >> _password;
-                    /* string _id_check = atm::get_id(_id);
-                    string _password_check = atm::get_pass(_password); */
-                    if(atm::check_acc(_id,_password) == true) {
-                        solannhapsai = 0;
-                        break;
-                    }    
-                    solannhapsai++;
-                }
-            }
-        }
-    }
-    if(flag == 0) { 
-        Account _a(_id);
-        atm::menu(_a);
-        solannhapsai = 0;
-    }
-    else {
         system("clear");
         login_screens();
     }
+
 }
 void atm::menu(Account _a) {
     //window
     //system("CLS");
         // linux
         system("clear");
-    options_display();
+        Display d;
+        d.options_display();
         int n ;
         cin >> n;
         switch(n){
@@ -304,7 +265,8 @@ void atm::guitien_display(Account _a){
         // linux
         system("clear");
     //guitien.h
-    menh_gia_display();
+    Display d;
+    d.menh_gia_display();
     int money = nhap_so_tien();
     string _money = stringConvert(money);
     while(moneyCheck(money,_money) != true ) history_Update(_a,_money,"gui_tien","that_bai");
@@ -319,7 +281,8 @@ void atm::guitien_display(Account _a){
 void atm::_rut_tien(Account _a){
     // viet lai rut tien
     system("clear");
-    rut_tien_menh_gia();
+    Display d;
+    d.rut_tien_menh_gia();
     int money = 0;
     cin >> money;
     string _money = stringConvert(money);
@@ -387,8 +350,84 @@ void atm::history_Update(Account _a,string money,string func,string status) {
 }
 void atm::history_show(Account _a) {
     system("clear");
+    Display d;
     string s = _a.get_Id();
     string fileDes = s+"_lichsugiaodich.txt";
     const char* fileName = &fileDes[0];
-    history_display(fileName);
+    d.history_display(fileName);
+}
+void atm::atm_working() {
+    int solannhapsai = 0, flag = 0;
+    string _id;
+    string _password;
+    cout << "id:";
+    cin >> _id;
+    cout << "password:";
+    cin >> _password;
+    if (status_check(_id, _password) == false)
+    {
+        cout << "Tai khoan nay da bi khoa!";
+        flag = 1;
+        cout << "\nbam phim bat ki de tiep tuc giao dich!";
+        char c;
+        c = cin.get();
+        cin.ignore();
+    }
+    else
+    {
+        while (solannhapsai <= 5)
+        {
+            if (check_acc(_id, _password) == true)
+            {
+                break;
+            }
+            else
+            {
+                if (solannhapsai == 5)
+                {
+                    khoa_tai_khoan(_id);
+                    cout << "tai khoan cua ban da bi khoa!"
+                         << "\nbam phim bat ki de tiep tuc giao dich!";
+                    char c;
+                    c = cin.get();
+                    cin.ignore();
+                    flag = 1;
+                    break;
+                }
+                else
+                {
+                    system("clear");
+                    cout << "mat khau nhap sai, vui long nhap lai!\n";
+                    cout << "bam phim bat ki de nhap lai\n";
+                    char c;
+                    c = cin.get();
+                    cin.ignore();
+                    system("clear");
+                    cout << "id:";
+                    cin >> _id;
+                    cout << "password:";
+                    cin >> _password;
+                    /* string _id_check = atm::get_id(_id);
+                    string _password_check = atm::get_pass(_password); */
+                    if (atm::check_acc(_id, _password) == true)
+                    {
+                        solannhapsai = 0;
+                        break;
+                    }
+                    solannhapsai++;
+                }
+            }
+        }
+    }
+    if (flag == 0)
+    {
+        Account _a(_id);
+        atm::menu(_a);
+        solannhapsai = 0;
+    }
+    else
+    {
+        system("clear");
+        login_screens();
+    }
 }

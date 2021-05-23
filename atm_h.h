@@ -29,6 +29,8 @@ class atm
         void history_show(Account _a);
         bool status_check(string s,string p);
         void khoa_tai_khoan(string s);
+        void atm_working() ;
+        
     private:
         string id;
         string password;
