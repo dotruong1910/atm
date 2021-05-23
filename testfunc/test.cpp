@@ -1,15 +1,8 @@
 #include <string>
 #include <iostream>
+#include <vector>
 using namespace std;
+vector<string> ques = {"loai vat ban yeu thich la gi?", "ngay thang nam sinh cua ban?", "mon the thao ban yeu thich?"};
 int main() {
-string password;
-char c;
-// loop condition: get a character, while it isn't a newline (end of password), then...
-while (cin >> c && c != '\n')
-{
-        password+=c;
-        cin.ignore();
-}
-
-cout<<password;
+for(int i = 0; i< 3;i++) cout <<ques[i]<<"\n" ;
 }

@@ -8,8 +8,12 @@ class Bankdata
         Bankdata(){};
         bool id_is_exist(std::string _id);
         bool account_check(std::string id,std::string password);
+        bool ques_check(string ques, string ans,const char* filename);
+        bool status_check(string s, string p);
         void add_account(string _id, string pass, string status);
-    private:
+        void khoa_tai_khoan(string s) ;
+        void mo_tai_khoan(string s);
+        private : 
         std::string id;
         std::string password;
 };

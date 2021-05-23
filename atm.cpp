@@ -123,7 +123,7 @@ bool atm::check_acc(string acc,string pass){
     ifstream file;
     file.open("user_info.txt");
     /* string s;
-    getline(file,s); */
+    getline(file,s); */ 
     if(file.is_open()){
         while(!file.eof()){
             string _id,_pass;
@@ -138,9 +138,9 @@ bool atm::check_acc(string acc,string pass){
     }
     file.close();
     return false;
-}
+} 
 //check status;
-bool atm::status_check(string s,string p) {
+/* bool atm::status_check(string s,string p) {
     ifstream file;
     file.open("user_info.txt");
     if(file.is_open()){
@@ -157,8 +157,8 @@ bool atm::status_check(string s,string p) {
     }
     file.close();
     return true;
-}
-void atm::khoa_tai_khoan(string s){
+} */
+/* void atm::khoa_tai_khoan(string s){
     ofstream file_out;
     file_out.open("temp.txt",ios::app|ios::out);
     ifstream file_in;
@@ -178,7 +178,7 @@ void atm::khoa_tai_khoan(string s){
         remove("user_info.txt");
         rename("temp.txt","user_info.txt");
     }
-}
+} */
 //Truyen vao account de thao tac voi cai account
 void atm::login_screens(){
     Display D;
@@ -196,6 +196,9 @@ void atm::login_screens(){
         cin.ignore();
         system("clear");
         login_screens();
+    }
+    else if(option == 3) {
+        D.mokhoataikhoan();
     }
 
 }
@@ -269,7 +272,7 @@ void atm::guitien_display(Account _a){
     d.menh_gia_display();
     int money = nhap_so_tien();
     string _money = stringConvert(money);
-    while(moneyCheck(money,_money) != true ) history_Update(_a,_money,"gui_tien","that_bai");
+    //while(moneyCheck(money,_money) != true ) history_Update(_a,_money,"gui_tien","that_bai");
     //guitien.h
     //lay id de kiem tra so du cua id day
     string s = _a.get_Id();
@@ -305,6 +308,7 @@ void atm::_rut_tien(Account _a){
         cout<<"Xin loi so du con lai khong the thuc hien dao dich nay!";
         history_Update(_a,_money,"rut_tien","that_bai");
     }
+
 }
 //check point
 void atm::tiep_tuc_giao_dich(Account _a){
@@ -357,6 +361,7 @@ void atm::history_show(Account _a) {
     d.history_display(fileName);
 }
 void atm::atm_working() {
+    Bankdata B;
     int solannhapsai = 0, flag = 0;
     string _id;
     string _password;
@@ -364,7 +369,7 @@ void atm::atm_working() {
     cin >> _id;
     cout << "password:";
     cin >> _password;
-    if (status_check(_id, _password) == false)
+    if (B.status_check(_id, _password) == false)
     {
         cout << "Tai khoan nay da bi khoa!";
         flag = 1;
@@ -385,7 +390,7 @@ void atm::atm_working() {
             {
                 if (solannhapsai == 5)
                 {
-                    khoa_tai_khoan(_id);
+                    B.khoa_tai_khoan(_id);
                     cout << "tai khoan cua ban da bi khoa!"
                          << "\nbam phim bat ki de tiep tuc giao dich!";
                     char c;

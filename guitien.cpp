@@ -7,6 +7,7 @@
 
 using namespace std;
 int a[5] ={500000,200000,100000,50000,10000};
+//int count[5] = {0, 0, 0, 0, 0};
 void guitien_hoptien_update(int arr[]){
     ifstream f;
     f.open("hoptien.txt");
@@ -41,8 +42,8 @@ bool flag() {
 }
 void nhapsoto(int n,int& tong,int arr[]){
     if(tong == n){
-        int count[4];
-        for(int i = 0; i< 4;i++){
+        int count[5];
+        for(int i = 0; i< 5;i++){
             count[i] = laysoluong(a[i]);
             arr[i] += count[i];
         }

@@ -3,10 +3,13 @@
 #include <fstream>
 #include<iomanip>
 #include<string>
+#include<vector>
 #include "display.h"
 #include "account.h"
 #include "bankdata.h"
+#include "atm_h.h"
 using namespace std;
+vector<string> ques={"loai vat ban yeu thich la gi?","ngay thang nam sinh cua ban?","mon the thao ban yeu thich?"};
 string Display::del_(string s) {
         for(int i = 0; i<s.length();++i) {
                 if(s[i] == '_') s[i] =' ';
@@ -55,15 +58,18 @@ void Display::history_display(const char *name)
 }
 int Display::login_or_signin() {
         cout<<"bam '1' de dang nhap\n"
-                <<"\nneu chua co tai khoan hay bam '2' de dang ki\n";
+                <<"\nbam '2' de dang ki tai khoan\n"
+                <<"\nbam '3' de mo khoa tai khoan\n";
         char c; 
         cout<<"\nlua chon cua ban la: ";
         c = cin.get();
         cin.ignore();
         if (c == '1')
                 return 1;
-        if (c == '2')
+        else if (c == '2')
                 return 2;
+        else if (c == '3')
+                return 3;
         else{
                 return 0;
         }
@@ -84,4 +90,49 @@ void Display::signup_screen() {
         cin >> password;
         B.add_account(id,password,"0");
         
+}
+void Display::mokhoataikhoan() {
+        string id;
+        cout<<"nhap tai khoan can mo khoa: ";
+        cin >> id;
+        Bankdata B;
+        atm a;
+        if(B.id_is_exist(id) == true) {
+                int option;
+                string filename = id+"_ques.txt";
+                const char* fileDes = &filename[0];
+                cout<<"vui long chon cau hoi bao mat ma ban da chon trong tai khoan\n";
+                for(int i = 0; i< 3;i++)
+                        cout<<i+1<<": "<<ques[i]<<'\n';
+                cout<<"lua chon cua ban: "; cin >> option;
+                cout<<"\ncau tra loi cua ban la: ";
+                cin.get();
+                string ans;
+                std::getline(cin,ans);
+                if(B.ques_check(ques[option-1],ans,fileDes) == true) {
+                        B.mo_tai_khoan(id);
+                        cout<<"Thanh cong,bam phim bat ki de tro lai man hinh he thong!";
+                       /*  cin.get(); */
+                        cin.ignore();
+                        system("clear");
+                        a.login_screens();
+                        
+                }
+                else {
+                        cout<<"cau tra loi cua ban khong chinh xac, ";
+                        cout << "bam phim bat ki de tro lai man hinh he thong!";
+                        /* char c;
+                        c = cin.get(); */
+                        cin.ignore();
+                        system("clear");
+                        a.login_screens();
+                }
+        }
+        else {
+                cout<<"tai khoan nay khong co trong he thong!";
+                cout << "bam phim bat ki de tro lai man hinh he thong!";
+                cin.ignore();
+                system("clear");
+                a.login_screens();
+        }
 }
